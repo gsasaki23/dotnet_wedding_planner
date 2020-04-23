@@ -50,7 +50,7 @@ namespace wedding_planner.Models
             DateTime inputDate = Convert.ToDateTime(value);
 
             // logic for datetime =>  value.Date > CurrentTime
-            if (inputDate > DateTime.UtcNow)
+            if (inputDate < DateTime.UtcNow)
             {
                 return new ValidationResult("Invalid date.");
             }

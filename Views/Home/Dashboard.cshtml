@@ -5,6 +5,29 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Dashboard!</h1>
-    <p>@Model.FirstName @Model.LastName</p>
+    <h1 class="display-4">Welcome, @Model.FirstName!</h1>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Wedding</th>
+            <th scope="col">Date</th>
+            <th scope="col">Guest</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var wedding in ViewBag.weddings)
+        {
+            <tr>
+                <td>@wedding.WedderOne & @wedding.WedderTwo</td>
+                <td>@wedding.Date.ToString("MMM d yyyy")</td>
+                <td>@wedding.AllRSVPs.Count</td>
+                <td>N/A</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/new" class="btn btn-secondary" role="button">+ New Wedding</a>

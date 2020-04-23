@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using wedding_planner.Models;
 
 namespace wedding_planner.Controllers
@@ -13,6 +14,8 @@ namespace wedding_planner.Controllers
     public class HomeController : Controller
     {
         private WeddingPlannerContext db;
+        private int? uid{get {return HttpContext.Session.GetInt32("UserId");}}
+
         public HomeController(WeddingPlannerContext context)
         {
             db = context;
@@ -21,8 +24,7 @@ namespace wedding_planner.Controllers
         public IActionResult Index()
         {
             // If there is a user already logged in (=it's in session), jump them in
-            int? UserId = HttpContext.Session.GetInt32("UserId");
-            if (UserId != null)
+            if (uid != null)
             {
                 return RedirectToAction("Dashboard");
             }
@@ -108,8 +110,54 @@ namespace wedding_planner.Controllers
 
             // User to use in page
             User currentUser = db.Users.FirstOrDefault(user => user.UserId == UserId);
+            ViewBag.weddings = db.Weddings
+                .Include(wedding => wedding.HostUser)
+                .Include(wedding => wedding.AllRSVPs)
+                .ThenInclude(rsvp => rsvp.User)
+                .ToList();
+
             return View(currentUser);
         }
+
+        // New Wedding GET and POST
+        [HttpGet("/new")]
+        public IActionResult NewWedding()
+        {
+            // If no user signed in, kick them out
+            if (uid == null)
+            {
+                return RedirectToAction("Index");           
+            }
+            return View();
+        }
+        [HttpPost("/create")]
+        public IActionResult AddWeddingToDB(Wedding newWedding)
+        {
+            // If no user signed in, kick them out
+            if (uid == null)
+            {
+                return RedirectToAction("Index");           
+            }
+            if (ModelState.IsValid)
+            {
+                newWedding.HostUserId = (int)uid;
+                db.Add(newWedding);
+
+                // Also make and add new RSVP to db (MANY TO MANY)
+                RSVP newRSVP = new RSVP();
+                newRSVP.UserId = (int)uid;
+                newRSVP.WeddingId = (int)newWedding.WeddingId;
+                db.Add(newRSVP);
+
+                db.SaveChanges();
+                return RedirectToAction("Dashboard");
+            }
+            // If there were any ModelState invalidations, re-render form with error msg
+            return View("NewWedding");
+        }
+
+
+
 
         public IActionResult Logout()
         {

@@ -1,0 +1,60 @@
+@model Wedding
+
+@{
+    ViewData["Title"] = "New Wedding";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Plan your Wedding!</h1>
+</div>
+<div class="container mt-5">
+    <form asp-controller="Home" asp-action="AddWeddingToDB" method="POST">
+        <fieldset class="border p-3">
+        <legend class="w-auto">
+            New Wedding
+        </legend>
+
+        <div class="form-group row">
+            <label asp-for="WedderOne" class="col-sm-3 col-form-label">
+                WedderOne 
+                <span asp-validation-for="WedderOne" class="text-danger font-weight-bold"></span>
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="WedderOne" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="WedderTwo" class="col-sm-3 col-form-label">
+                WedderTwo 
+                <span asp-validation-for="WedderTwo" class="text-danger font-weight-bold"></span>
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="WedderTwo" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Date" class="col-sm-3 col-form-label">
+                Date 
+                <span asp-validation-for="Date" class="text-danger font-weight-bold"></span>
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="Date" type="date" class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Address" class="col-sm-3 col-form-label">
+                Address 
+                <span asp-validation-for="Address" class="text-danger font-weight-bold"></span>
+            </label>
+            <div class="col-sm-9">
+                <input asp-for="Address" class="form-control">
+            </div>
+        </div>
+
+        <div class="text-right">
+            <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Cancel</a>
+            <button class="btn btn-success">Submit</button>
+        </div>
+        </fieldset>
+  </form>
+</div>
