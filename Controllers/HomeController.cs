@@ -156,7 +156,7 @@ namespace wedding_planner.Controllers
 
         
         // Wedding Detail
-        [HttpGet("/{weddingId}")]
+        [HttpGet("/weddings/{weddingId}")]
         public IActionResult Wedding(int weddingId)
         {
             // If no user signed in, kick them out
@@ -178,7 +178,7 @@ namespace wedding_planner.Controllers
 
 
         // DELETE a Wedding
-        [HttpPost("/{weddingId}/delete")]
+        [HttpPost("/weddings/{weddingId}/delete")]
         public IActionResult Delete(int weddingId)
         {
             // Remove the first wedding found in DB with same id

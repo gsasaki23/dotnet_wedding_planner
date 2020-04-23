@@ -21,12 +21,16 @@
         @foreach (var wedding in ViewBag.weddings)
         {
             <tr>
-                <td><a href="/@wedding.WeddingId">@wedding.WedderOne & @wedding.WedderTwo</a></td>
+                <td><a href="/weddings/@wedding.WeddingId">@wedding.WedderOne & @wedding.WedderTwo</a></td>
                 <td>@wedding.Date.ToString("MMM d yyyy")</td>
                 <td>@wedding.AllRSVPs.Count</td>
                 @if(Model.UserId == @wedding.HostUserId)
                 {
-                    <td><a class="text-danger" asp-controller="Home" asp-action="Delete" asp-route-weddingId="@wedding.WeddingId">Delete</a></td>
+                    <td>
+                        <form asp-controller="Home" asp-action="Delete" method="POST" asp-route-weddingId="@wedding.WeddingId">
+                            <button class="btn btn-link">Delete</button>
+                        </form>
+                    </td>
                 } else {
                     var RSVPd = false;
                     foreach (var rsvp in @wedding.AllRSVPs)
