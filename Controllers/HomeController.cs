@@ -145,11 +145,7 @@ namespace wedding_planner.Controllers
                 newWedding.HostUserId = (int)uid;
                 db.Add(newWedding);
 
-                // Also make and add new RSVP to db (MANY TO MANY)
-                RSVP newRSVP = new RSVP();
-                newRSVP.UserId = (int)uid;
-                newRSVP.WeddingId = (int)newWedding.WeddingId;
-                db.Add(newRSVP);
+                
 
                 db.SaveChanges();
                 return RedirectToAction("Dashboard");
@@ -179,6 +175,15 @@ namespace wedding_planner.Controllers
             }
             return RedirectToAction("Dashboard");
         }
+
+
+
+
+        // Make and add new RSVP to db (MANY TO MANY)
+        // RSVP newRSVP = new RSVP();
+        // newRSVP.UserId = (int)uid;
+        // newRSVP.WeddingId = (int)newWedding.WeddingId;
+        // db.Add(newRSVP);
 
 
         public IActionResult Logout()
