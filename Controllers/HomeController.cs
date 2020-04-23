@@ -114,6 +114,7 @@ namespace wedding_planner.Controllers
                 .Include(wedding => wedding.HostUser)
                 .Include(wedding => wedding.AllRSVPs)
                 .ThenInclude(rsvp => rsvp.User)
+                .OrderBy(wedding => wedding.Date)
                 .ToList();
 
             return View(currentUser);

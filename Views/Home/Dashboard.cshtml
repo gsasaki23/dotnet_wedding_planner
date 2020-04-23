@@ -24,7 +24,13 @@
                 <td>@wedding.WedderOne & @wedding.WedderTwo</td>
                 <td>@wedding.Date.ToString("MMM d yyyy")</td>
                 <td>@wedding.AllRSVPs.Count</td>
-                <td>N/A</td>
+                @if(Model.UserId == @wedding.HostUserId)
+                {
+                    <td>Delete</td>
+                }
+                else{
+                    <td>RSVP</td>
+                }
             </tr>
         }
     </tbody>
