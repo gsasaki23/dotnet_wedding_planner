@@ -26,7 +26,7 @@
                 <td>@wedding.AllRSVPs.Count</td>
                 @if(Model.UserId == @wedding.HostUserId)
                 {
-                    <td>Delete</td>
+                    <td><a class="text-danger" asp-controller="Home" asp-action="Delete" asp-route-weddingId="@wedding.WeddingId">Delete</a></td>
                 } else {
                     var RSVPd = false;
                     foreach (var rsvp in @wedding.AllRSVPs)
@@ -35,11 +35,13 @@
                         {
                             RSVPd = true;
                             <td>Un-RSVP</td>
+                            // WOULD MAKE A POST REQUEST TO SEND WEDDING.ID AND USER.ID, BUT DON"T KNOW HOW TO WRITE VIEW SIDE RN
                         }
                     }
                     if (RSVPd == false)
                     {
                         <td>RSVP</td>
+                        // WOULD MAKE A POST REQUEST TO SEND ID AND USER.ID, BUT DON"T KNOW HOW TO WRITE VIEW SIDE RN
                     }
                 }
             </tr>

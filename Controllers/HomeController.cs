@@ -177,6 +177,15 @@ namespace wedding_planner.Controllers
         }
 
 
+        // DELETE a Wedding
+        [HttpPost("/{weddingId}/delete")]
+        public IActionResult Delete(int weddingId)
+        {
+            // Remove the first wedding found in DB with same id
+            db.Weddings.Remove(db.Weddings.FirstOrDefault(w=>w.WeddingId == weddingId));
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
 
 
         // Make and add new RSVP to db (MANY TO MANY)
