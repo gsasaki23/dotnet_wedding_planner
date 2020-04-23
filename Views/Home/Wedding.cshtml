@@ -25,9 +25,11 @@
         </div>
     </div>
     <div class="col-md-6">
+        <h4>Location: @Model.Address</h4>
+
         @if (@Model.HostUser.UserId == userId)
         {
-            <h1>I HAVE THE POWER TO CRASH THIS WEDDING</h1>
+            <h5>DEVELOPMENT: Logged in User is the Original Creator of this Wedding.</h5>
         }
     </div>
 </div>
