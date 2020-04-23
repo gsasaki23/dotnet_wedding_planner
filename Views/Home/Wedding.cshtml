@@ -1,0 +1,33 @@
+@model Wedding
+@{
+    int? userId = Context.Session.GetInt32("UserId");
+}
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="row text-center">
+    <h1 class="display-4">@Model.WedderOne and @Model.WedderTwo's Wedding</h1>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <h4>Date: @Model.Date.ToString("MMMM d yyyy")</h4>
+        </div>
+        <div>
+            <h4>Guests:</h4>
+            <ul style="list-style-type:none">
+                @foreach (var rsvp in @Model.AllRSVPs)
+                {
+                    <li>@rsvp.User.FirstName @rsvp.User.LastName</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        @if (@Model.HostUser.UserId == userId)
+        {
+            <h1>I HAVE THE POWER TO CRASH THIS WEDDING</h1>
+        }
+    </div>
+</div>

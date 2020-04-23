@@ -62,7 +62,6 @@ namespace wedding_planner.Controllers
             HttpContext.Session.SetInt32("UserId", newUser.UserId);
             return RedirectToAction("Dashboard");
         }
-
         public IActionResult Login(LoginUser loginUser)
         {
             // Show error messages
@@ -98,6 +97,7 @@ namespace wedding_planner.Controllers
             return RedirectToAction("Dashboard");
         }
 
+
         [HttpGet("/dashboard")]
         public IActionResult Dashboard()
         {
@@ -120,6 +120,7 @@ namespace wedding_planner.Controllers
             return View(currentUser);
         }
 
+        
         // New Wedding GET and POST
         [HttpGet("/new")]
         public IActionResult NewWedding()
@@ -157,7 +158,27 @@ namespace wedding_planner.Controllers
             return View("NewWedding");
         }
 
-
+        
+        // Wedding Detail
+        [HttpGet("/{weddingId}")]
+        public IActionResult Wedding(int weddingId)
+        {
+            // If no user signed in, kick them out
+            if (uid == null)
+            {
+                return RedirectToAction("Index");           
+            }
+            Wedding wedding = db.Weddings
+                .Include(w => w.HostUser)
+                .Include(w => w.AllRSVPs)
+                .ThenInclude(rsvp => rsvp.User)
+                .FirstOrDefault(w => w.WeddingId == weddingId);
+            if (wedding != null)
+            {
+                return View(wedding);
+            }
+            return RedirectToAction("Dashboard");
+        }
 
 
         public IActionResult Logout()
