@@ -38,14 +38,16 @@
                         if (rsvp.UserId == @Model.UserId)
                         {
                             RSVPd = true;
-                            <td>Un-RSVP</td>
-                            // WOULD MAKE A POST REQUEST TO SEND WEDDING.ID AND USER.ID, BUT DON"T KNOW HOW TO WRITE VIEW SIDE RN
+                            <td><form asp-controller="Home" asp-action="UnRSVP" method="POST" asp-route-weddingId="@wedding.WeddingId">
+                                <button class="btn btn-link">Un-RSVP</button>
+                            </form></td>
                         }
                     }
                     if (RSVPd == false)
                     {
-                        <td>RSVP</td>
-                        // WOULD MAKE A POST REQUEST TO SEND ID AND USER.ID, BUT DON"T KNOW HOW TO WRITE VIEW SIDE RN
+                        <td><form asp-controller="Home" asp-action="AddRSVP" method="POST" asp-route-weddingId="@wedding.WeddingId">
+                            <button class="btn btn-link">RSVP</button>
+                        </form></td>
                     }
                 }
             </tr>

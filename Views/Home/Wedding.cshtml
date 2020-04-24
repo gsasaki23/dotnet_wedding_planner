@@ -17,19 +17,26 @@
         <div>
             <h4>Guests:</h4>
             <ul style="list-style-type:none">
-                @foreach (var rsvp in @Model.AllRSVPs)
+                @if (@Model.AllRSVPs.Count == 0)
                 {
-                    <li>@rsvp.User.FirstName @rsvp.User.LastName</li>
+                    <li>No guests to show... yet!</li>
+                } else {
+                    @foreach (var rsvp in @Model.AllRSVPs)
+                    {
+                        <li>@rsvp.User.FirstName @rsvp.User.LastName</li>
+                    }
                 }
             </ul>
         </div>
     </div>
     <div class="col-md-6">
         <h4>Location: @Model.Address</h4>
-
-        @if (@Model.HostUser.UserId == userId)
-        {
-            <h5>DEVELOPMENT: Logged in User is the Original Creator of this Wedding.</h5>
-        }
+        <h4>~~~ Google Maps goes here ~~~</h4>
     </div>
+</div>
+<div class="row">
+    @if (@Model.HostUser.UserId == userId)
+        {
+            <h5>Edit?</h5>
+        }
 </div>

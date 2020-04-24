@@ -187,12 +187,26 @@ namespace wedding_planner.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        [HttpPost("/weddings/{weddingId}/addRSVP")]
+        public IActionResult AddRSVP(int weddingId)
+        {
+            RSVP newRSVP = new RSVP();
+            newRSVP.UserId = (int)uid;
+            newRSVP.WeddingId = weddingId;
+            db.Add(newRSVP);
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
 
-        // Make and add new RSVP to db (MANY TO MANY)
-        // RSVP newRSVP = new RSVP();
-        // newRSVP.UserId = (int)uid;
-        // newRSVP.WeddingId = (int)newWedding.WeddingId;
-        // db.Add(newRSVP);
+        [HttpPost("/weddings/{weddingId}/unRSVP")]
+        public IActionResult UnRSVP(int weddingId)
+        {
+            db.RSVPs.Remove(db.RSVPs.FirstOrDefault(w=>w.WeddingId == weddingId && w.UserId == uid));
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
+
+
 
 
         public IActionResult Logout()
