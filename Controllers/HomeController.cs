@@ -154,6 +154,7 @@ namespace wedding_planner.Controllers
             return View("NewWedding");
         }
         
+
         // Wedding Detail
         [HttpGet("/weddings/{weddingId}")]
         public IActionResult Wedding(int weddingId)
@@ -175,6 +176,8 @@ namespace wedding_planner.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        
+        
         [HttpGet("/weddings/{weddingId}/edit")]
         public IActionResult EditWedding(int weddingId)
         {
@@ -193,6 +196,7 @@ namespace wedding_planner.Controllers
             }
             return View(weddingToEdit);
         }
+
         [HttpPost("/weddings/update")]
         public IActionResult UpdateWedding(Wedding editWedding, int weddingId)
         {
@@ -217,12 +221,32 @@ namespace wedding_planner.Controllers
         }
 
 
+
         // DELETE a Wedding
         [HttpPost("/weddings/{weddingId}/delete")]
         public IActionResult Delete(int weddingId)
         {
             // Remove the first wedding found in DB with same id
             db.Weddings.Remove(db.Weddings.FirstOrDefault(w=>w.WeddingId == weddingId));
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
+
+        // Delete all expired weddings, only if you were the original host of it
+        [HttpPost("/weddings/deleteExpired")]
+        public IActionResult DeleteExpiredWeddings()
+        {
+            List<Wedding> dbWeddings = db.Weddings
+                .Include(w=>w.HostUser)
+                .ToList();
+            foreach (Wedding wedding in dbWeddings)
+            {
+                // DateTime weddingDate = Convert.ToDateTime(wedding.Date);
+                if (wedding.Date < DateTime.UtcNow && wedding.HostUser.UserId == uid)
+                {
+                    db.Weddings.Remove(db.Weddings.FirstOrDefault(w=>w.WeddingId == wedding.WeddingId));
+                }
+            }
             db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
@@ -245,8 +269,6 @@ namespace wedding_planner.Controllers
             db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
-
-
 
 
         public IActionResult Logout()
