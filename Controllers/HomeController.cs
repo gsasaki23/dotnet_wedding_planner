@@ -153,7 +153,6 @@ namespace wedding_planner.Controllers
             // If there were any ModelState invalidations, re-render form with error msg
             return View("NewWedding");
         }
-
         
         // Wedding Detail
         [HttpGet("/weddings/{weddingId}")]
@@ -174,6 +173,47 @@ namespace wedding_planner.Controllers
                 return View(wedding);
             }
             return RedirectToAction("Dashboard");
+        }
+
+        [HttpGet("/weddings/{weddingId}/edit")]
+        public IActionResult EditWedding(int weddingId)
+        {
+            // If no user signed in, kick them out
+            if (uid == null)
+            {
+                return RedirectToAction("Index");           
+            }
+            Wedding weddingToEdit = db.Weddings
+                .Include(w=>w.HostUser)
+                .FirstOrDefault((w=>w.WeddingId == weddingId));
+            // prevent unfound wedding IDs or non-host users trying to edit somehow
+            if (weddingToEdit == null || weddingToEdit.HostUser.UserId != uid)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            return View(weddingToEdit);
+        }
+        [HttpPost("/weddings/update")]
+        public IActionResult UpdateWedding(Wedding editWedding, int weddingId)
+        {
+            // in case of validation errors, send back with what was entered
+            if (ModelState.IsValid == false)
+            {
+                return View("EditWedding",editWedding);
+            }
+            Wedding dbwedding = db.Weddings.FirstOrDefault((w=>w.WeddingId == weddingId));
+            // prevent unfound wedding ID
+            if (dbwedding == null)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            dbwedding.WedderOne = editWedding.WedderOne;
+            dbwedding.WedderTwo = editWedding.WedderTwo;
+            dbwedding.Date = editWedding.Date;
+            dbwedding.Address = editWedding.Address;
+            db.Weddings.Update(dbwedding);
+            db.SaveChanges();
+            return RedirectToAction("Wedding",new {weddingId = dbwedding.WeddingId});
         }
 
 

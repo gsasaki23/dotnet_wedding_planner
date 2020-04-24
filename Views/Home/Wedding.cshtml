@@ -37,6 +37,6 @@
 <div class="row">
     @if (@Model.HostUser.UserId == userId)
         {
-            <h5>Edit?</h5>
+            <a asp-controller="Home" asp-action="EditWedding" asp-route-weddingId="@Model.WeddingId" class="btn btn-warning">Edit</a>
         }
 </div>
